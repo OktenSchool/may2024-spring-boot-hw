@@ -1,6 +1,11 @@
 spring:
   application:
-    name: may-2024-spring
-
-  profiles:
-    active: store1
+    name: may-2024-spring-boot
+  datasource:
+    url: "jdbc:mysql://localhost:3306/asd?createDatabaseIfNotExist=true"
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
