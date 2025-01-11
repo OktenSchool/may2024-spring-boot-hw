@@ -4,18 +4,25 @@ import lombok.RequiredArgsConstructor;
 import org.example.may2024springhw.dto.CarDTO;
 import org.example.may2024springhw.dto.CarUpdateDTO;
 import org.example.may2024springhw.enteties.Car;
+import org.example.may2024springhw.enteties.Owner;
 import org.example.may2024springhw.mappers.CarMapper;
 import org.example.may2024springhw.repositories.CarRepository;
+import org.example.may2024springhw.repositories.OwnerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
+    private final OwnerRepository ownerRepository;
+    private final EmailService emailService;
 
     public List<CarDTO> getAll() {
         return carRepository
@@ -26,7 +33,12 @@ public class CarService {
     }
 
     public CarDTO create(CarDTO carDTO) {
-        Car car = carRepository.save(carMapper.mapToCar(carDTO));
+        Owner owner = ownerRepository.findByUsername(carDTO.getUsername())
+                .orElseThrow(() -> new NoSuchElementException("Owner not found"));
+
+        Car car = carMapper.mapToCar(carDTO);
+        car.setOwner(owner);
+        car = carRepository.save(car);
         return carMapper.mapToDTO(car);
     }
 
@@ -51,5 +63,30 @@ public class CarService {
 
     public void delete(Long id) {
         carRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void notifyOwnersAboutOldMaintenance(int day) {
+        LocalDate date = LocalDate.now().minusDays(day);
+
+        ownerRepository.findAll().forEach(owner -> {
+            List<Car> oldMaintenanceCars
+                    = owner.getCars().stream()
+                    .filter(car -> car.getLastMaintenanceTimestamp().isBefore(date)).toList();
+
+            if (!oldMaintenanceCars.isEmpty()) {
+                String subject = "Cars with old maintenance date:";
+                String text = "Your cars needed maintenance:\n" +
+                        oldMaintenanceCars.stream()
+                                .map(car -> String.format(
+                                        "Car: %s, Last Maintenance: %s",
+                                        car.getBrand(),
+                                        car.getLastMaintenanceTimestamp()
+                                )).collect(Collectors.joining("\n"));
+                emailService.sendEmail(owner.getEmail(), subject, text);
+            }
+        });
+
+
     }
 }

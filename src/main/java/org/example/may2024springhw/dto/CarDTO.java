@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class CarDTO {
@@ -21,4 +23,7 @@ public class CarDTO {
     @Min(value = 1990, message = "year min 1990")
     @Max(value = 2024, message = "year max 2024")
     private int year;
+
+    private String username;
+    private LocalDate lastMaintenanceTimestamp;
 }

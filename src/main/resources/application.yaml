@@ -9,3 +9,17 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  data:
+    mongodb:
+      uri: mongodb://localhost/carservice
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: owu.test.email@gmail.com
+    password: ainuypabljetuhxe
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
