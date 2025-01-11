@@ -1,7 +1,7 @@
-package org.example.may2024hw.mapper;
+package org.example.may2024springhw.mappers;
 
-import org.example.may2024hw.dto.CarDTO;
-import org.example.may2024hw.enteties.Car;
+import org.example.may2024springhw.dto.CarDTO;
+import org.example.may2024springhw.enteties.Car;
 import org.springframework.stereotype.Component;
 
 @Component

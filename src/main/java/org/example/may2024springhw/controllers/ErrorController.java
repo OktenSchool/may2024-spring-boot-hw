@@ -1,9 +1,8 @@
-package org.example.may2024hw.controllers;
+package org.example.may2024springhw.controllers;
 
-import org.example.may2024hw.dto.ErrorDTO;
+import org.example.may2024springhw.dto.ErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,11 +28,11 @@ public class ErrorController {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public ResponseEntity<ErrorDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String details =  e
+        String details = e
                 .getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error ->error.getField().concat(" : ").concat(error.getDefaultMessage()))
+                .map(error -> error.getField().concat(" : ").concat(error.getDefaultMessage()))
                 .collect(Collectors.joining(" || "));
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

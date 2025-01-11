@@ -1,4 +1,4 @@
-package org.example.may2024hw.enteties;
+package org.example.may2024springhw.enteties;
 
 import jakarta.persistence.*;
 import lombok.Data;

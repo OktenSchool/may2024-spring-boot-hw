@@ -1,11 +1,11 @@
-package org.example.may2024hw.services;
+package org.example.may2024springhw.services;
 
 import lombok.RequiredArgsConstructor;
-import org.example.may2024hw.dto.CarDTO;
-import org.example.may2024hw.dto.CarUpdateDTO;
-import org.example.may2024hw.enteties.Car;
-import org.example.may2024hw.mapper.CarMapper;
-import org.example.may2024hw.repositories.CarRepository;
+import org.example.may2024springhw.dto.CarDTO;
+import org.example.may2024springhw.dto.CarUpdateDTO;
+import org.example.may2024springhw.enteties.Car;
+import org.example.may2024springhw.mappers.CarMapper;
+import org.example.may2024springhw.repositories.CarRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
 
-    public List<CarDTO> getAll(){
+    public List<CarDTO> getAll() {
         return carRepository
                 .findAll()
                 .stream()
@@ -25,19 +25,19 @@ public class CarService {
                 .toList();
     }
 
-    public CarDTO create(CarDTO carDTO){
+    public CarDTO create(CarDTO carDTO) {
         Car car = carRepository.save(carMapper.mapToCar(carDTO));
         return carMapper.mapToDTO(car);
     }
 
-    public CarDTO getById(Long id){
+    public CarDTO getById(Long id) {
         Car car = carRepository
                 .findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Car not found"));
         return carMapper.mapToDTO(car);
     }
 
-    public CarDTO update(Long id, CarUpdateDTO carUpdateDTO){
+    public CarDTO update(Long id, CarUpdateDTO carUpdateDTO) {
         Car car = carRepository
                 .findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Car not found"));
@@ -49,7 +49,7 @@ public class CarService {
         return carMapper.mapToDTO(savedCar);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         carRepository.deleteById(id);
     }
 }
